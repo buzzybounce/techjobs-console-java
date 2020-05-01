@@ -10,6 +10,7 @@ import java.io.Reader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by LaunchCode
@@ -51,7 +52,9 @@ public class JobData {
         // load data, if not already loaded
         loadData();
 
-        return allJobs;
+        ArrayList<HashMap<String, String>> allJobsCopy = allJobs;
+
+        return allJobsCopy;
     }
 
     /**
@@ -62,7 +65,7 @@ public class JobData {
      * with "Enterprise Holdings, Inc".
      *
      * @param column   Column that should be searched.
-     * @param value Value of teh field to search for
+     * @param value Value of the field to search for
      * @return List of all jobs matching the criteria
      */
     public static ArrayList<HashMap<String, String>> findByColumnAndValue(String column, String value) {
@@ -76,7 +79,7 @@ public class JobData {
 
             String aValue = row.get(column);
 
-            if (aValue.contains(value)) {
+            if (aValue.toLowerCase().contains(value.toLowerCase())) {
                 jobs.add(row);
             }
         }
@@ -125,4 +128,35 @@ public class JobData {
         }
     }
 
+    /**
+    *  Returns result of search based on the value
+    *  given by the user. This method searches all columns
+    *  and will return the row if any of the row's columns
+    *  matches the search term.
+    */
+
+    public static ArrayList<HashMap<String, String>> findByValue (String value) {
+
+        loadData();
+
+        ArrayList<HashMap<String, String>> jobs = new ArrayList<>();
+
+        for (HashMap<String, String> row: allJobs) {
+
+           for (Map.Entry<String, String> property: row.entrySet()) {
+
+               if (property.getValue().toLowerCase().contains(value.toLowerCase())) {
+
+                   jobs.add(row);
+                   break;
+
+               }
+
+           }
+
+        }
+
+        return jobs;
+
+    }
 }
